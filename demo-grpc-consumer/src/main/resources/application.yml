@@ -1,0 +1,44 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: demo-grpc-consumer
+  config:
+    import: optional:nacos:demo-grpc-consumer.yaml?group=${NACOS_GROUP}&refreshEnabled=false
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR}
+        username: ${NACOS_USERNAME}
+        password: ${NACOS_PASSWORD}
+        namespace: ${NACOS_NAMESPACE}
+        group: ${NACOS_GROUP}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR}
+        username: ${NACOS_USERNAME}
+        password: ${NACOS_PASSWORD}
+        namespace: ${NACOS_NAMESPACE}
+        group: ${NACOS_GROUP}
+  grpc:
+    client:
+      channels:
+        provider:
+          address: discovery:///demo-grpc-provider
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+hyacinth:
+  grpc:
+    discovery:
+      enabled: true
+      load-balancing-policy: round_robin
+
+logging:
+  level:
+    com.github.hyacinth.demo.consumer: INFO
+    com.alibaba.nacos: INFO
